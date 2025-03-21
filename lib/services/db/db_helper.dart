@@ -100,10 +100,4 @@ class DatabaseService {
       whereArgs: [txId, outputIndex],
     );
   }
-
-  /// Delete all UTXOs (reset the local database if needed)
-  Future<void> deleteAllUtxos() async {
-    final db = await database;
-    await db.delete('utxos');
-  }
 }
