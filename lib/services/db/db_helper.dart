@@ -21,7 +21,7 @@ class DatabaseService {
     return _instance;
   }
 
-  /// Get the database password from secure storage or generate a new one
+  // Get the database password from secure storage or generate a new one
   Future<String> _getOrGeneratePassword() async {
     String? passphrase = await AppPrefSecureStorage.readDbPassword;
     if (passphrase == null) {
@@ -31,7 +31,7 @@ class DatabaseService {
     return passphrase;
   }
 
-  /// Generate a random secure key for database encryption
+  // Generate a random secure key for database encryption
   String _generateSecureKey(int length) {
     const chars =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*()_+';
@@ -41,7 +41,7 @@ class DatabaseService {
             chars.length]).join();
   }
 
-  /// Getter for the database instance (initializes if not available)
+  // Getter for the database instance (initializes if not available)
   Future<Database> get database async {
     if (_db != null) return _db!;
     return await _initDB();
