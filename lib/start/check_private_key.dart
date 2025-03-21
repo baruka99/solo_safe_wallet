@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solosafe/screens/auth/start_auth.dart';
 import 'package:solosafe/screens/home_page/home_page.dart';
+import 'package:solosafe/services/shared_pref.dart';
 
 class CheckPrivateKeyExists extends StatefulWidget {
   const CheckPrivateKeyExists({super.key});
@@ -18,8 +18,8 @@ class _CheckPrivateKeyExistsState extends State<CheckPrivateKeyExists> {
   }
 
   Future<void> checkForMnemonic() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? prKey = prefs.getString('privateKey');
+    // get the private key
+    String? prKey = await AppPrefSecureStorage.readPrivateKey;
 
     // Navigate based on the presence of mnemonic
     if (mounted) {

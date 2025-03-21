@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:convert/convert.dart';
 import 'package:secure_enclave/secure_enclave.dart';
+import 'package:solosafe/services/shared_pref.dart';
 import 'package:wallet_kit/wallet_kit.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SoloSafeSecureEnclaveInterface {
   Future<SecureEnclave> getSecureEnclave();
@@ -115,20 +115,26 @@ Future<void> saveKeys(String privateKey, String publicKey, String mnemonic,
       await solosafeSecureEnclave.encryptValue(strkHexPrivateKey);
   final encryptedStrkAddress =
       await solosafeSecureEnclave.encryptValue(strkHexAddress);
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('publicKey', encryptedPublicKey);
-  await prefs.setString('privateKey', encryptedPrivateKey);
-  await prefs.setString('mnemonic', encryptedMnemonic);
-  await prefs.setString('strkPrivateKey', encryptedStrkPrivateKey);
-  await prefs.setString('strkAddress', encryptedStrkAddress);
+
+  // Write the private key
+  await AppPrefSecureStorage.writePublicKey(encryptedPublicKey);
+  // Write the private key
+  await AppPrefSecureStorage.writePrivateKey(encryptedPrivateKey);
+  // Write the mnemonic key
+  await AppPrefSecureStorage.writeMnemonic(encryptedMnemonic);
+  // Write the startknet private key
+  await AppPrefSecureStorage.writeStrkPrivateKey(encryptedStrkPrivateKey);
+  // Write the starknet address
+  await AppPrefSecureStorage.writeStrkAddress(encryptedStrkAddress);
 }
 
-Future<(String, String)> getDecryptedPublicKeys() async{
-  final prefs = await SharedPreferences.getInstance();
+Future<(String, String)> getDecryptedPublicKeys() async {
   final solosafeSecureEnclave = SoloSafeSecureEnclave();
-  final encryptedPublicKey = prefs.getString('publicKey') ?? '';
-  final encryptedStrkAddress = prefs.getString('strkAddress') ?? '';
-  final publicKey = await solosafeSecureEnclave.decryptValue(encryptedPublicKey);
-  final strkAddress = await solosafeSecureEnclave.decryptValue(encryptedStrkAddress);
+  final encryptedPublicKey = await AppPrefSecureStorage.readPublicKey ?? '';
+  final encryptedStrkAddress = await AppPrefSecureStorage.readStrkAdd ?? '';
+  final publicKey =
+      await solosafeSecureEnclave.decryptValue(encryptedPublicKey);
+  final strkAddress =
+      await solosafeSecureEnclave.decryptValue(encryptedStrkAddress);
   return (publicKey, strkAddress);
 }
