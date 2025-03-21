@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solosafe/services/shared_pref.dart';
 
 class DownloadAssetPage extends StatefulWidget {
   const DownloadAssetPage({super.key});
@@ -25,11 +25,10 @@ class _DownloadAssetPageState extends State<DownloadAssetPage> {
   }
 
   Future<void> _loadKeys() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      publicKey = prefs.getString('public_key') ?? 'No public key';
-      privateKey = prefs.getString('private_key') ?? 'No private key';
-    });
+    // Read the private and public keys securely from FlutterSecureStorage
+    publicKey = await AppPrefSecureStorage.readPublicKey ?? 'No public key';
+    privateKey = await AppPrefSecureStorage.readPrivateKey ?? 'No private key';
+    setState(() {});
   }
 
   Future<void> _startDownload() async {

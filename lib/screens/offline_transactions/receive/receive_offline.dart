@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:network_info_plus/network_info_plus.dart'; // For getting WiFi IP address
+import 'package:network_info_plus/network_info_plus.dart';
+import 'package:solosafe/services/shared_pref.dart'; // For getting WiFi IP address
 
 class ReceiveOfflinePage extends StatefulWidget {
   const ReceiveOfflinePage({super.key});
@@ -34,10 +34,13 @@ class _ReceiveOfflinePageState extends State<ReceiveOfflinePage>
   }
 
   Future<void> _loadWalletAddress() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Get the wallet address from secure storage
+    String? address = await AppPrefSecureStorage.readPublicKey;
+
+    // If the address exists, set it, else use the fallback
     if (mounted) {
       setState(() {
-        walletAddress = prefs.getString('public_key') ?? 'No address found';
+        walletAddress = address ?? 'No address found';
       });
     }
   }

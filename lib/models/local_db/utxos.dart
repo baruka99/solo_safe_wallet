@@ -1,3 +1,5 @@
+// UTXO Model (Unspent Transaction Output)
+
 class Utxo {
   final String txId; //transaction ID
   final int outputIndex; // output index transaction
@@ -27,7 +29,7 @@ class Utxo {
         'spent': spent ? 1 : 0,
       };
 
-  static Utxo fromMap(Map<String, dynamic> map) => Utxo(
+  factory Utxo.fromMap(Map<String, dynamic> map) => Utxo(
         txId: map['txId'],
         outputIndex: map['outputIndex'],
         address: map['address'],

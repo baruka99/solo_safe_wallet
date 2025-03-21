@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solosafe/routes/app_routes.dart'; // For app version
+import 'package:solosafe/routes/app_routes.dart';
+import 'package:solosafe/services/shared_pref.dart'; // For app version
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -113,11 +113,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             TextButton(
               onPressed: () async {
-                // Clear the private key from SharedPreferences
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.remove('private_key');
-                prefs.remove('public_key');
-                prefs.remove('mnemonic');
+                // Clear the private key from AppPrefSecureStorage
+                AppPrefSecureStorage.removeAll();
                 // Navigate to the start auth page remove all history so that the user can't go back
                 if (context.mounted) {
                   Navigator.pushNamedAndRemoveUntil(

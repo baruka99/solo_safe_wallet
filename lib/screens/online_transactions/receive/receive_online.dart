@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clipboard/clipboard.dart'; // Using clipboard package
+import 'package:clipboard/clipboard.dart';
+import 'package:solosafe/services/shared_pref.dart'; // Using clipboard package
 
 class ReceiveCryptoPage extends StatefulWidget {
   const ReceiveCryptoPage({super.key});
@@ -22,9 +22,11 @@ class _ReceiveCryptoPageState extends State<ReceiveCryptoPage> {
 
   // Fetch the wallet address from SharedPreferences
   Future<void> _loadWalletAddress() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Get the wallet address from secure storage
+    String? address = await AppPrefSecureStorage.readPublicKey;
+    // Set the wallet address or use a fallback if not found
     setState(() {
-      walletAddress = prefs.getString('public_key') ?? 'No address found';
+      walletAddress = address ?? 'No address found';
     });
   }
 
