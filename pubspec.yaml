@@ -37,6 +37,7 @@ dependencies:
   starknet: ^0.1.2+1
   secure_store: ^0.1.2+1
   starknet_provider: ^0.1.1+2
+  sqflite_sqlcipher: ^3.1.0+1
 
 dev_dependencies:
   flutter_test:
